@@ -1,69 +1,53 @@
-
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.13;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+contract Payable {
+    // Payable address can receive Ether
+    address payable public owner;
 
-contract Staking {
-  address owner;
-  mapping(bytes32 => address) public whitelistedTokens;
-  mapping(address => mapping(bytes32 => uint256)) public accountBalances;
+    address payable public winner;
 
-//////added this for the game 
+    // Payable constructor can receive Ether
+    constructor() payable {
+        owner = payable(msg.sender);
+    }
 
-string public message;
-address gameLootAddress;
-  uint public gameAmount= 100000;
- event Log(address indexed sender, string message);
-  
-/////////
-  constructor() {
-    owner = msg.sender;
-  }
+    // Function to deposit Ether into this contract.
+    // Call this function along with some Ether.
+    // The balance of this contract will be automatically updated.
+    function deposit() public payable {}
 
- function getOwner() external view returns(address){
-    return owner;
-  }
+    // Call this function along with some Ether.
+    // The function will throw an error since this function is not payable.
+    function notPayable() public {}
 
-/// adding to Game Loot//
-function addToGameAddress(uint256 amount, bytes32 symbol) external {
-require(gameAmount >= amount, 'Insufficent funds');
-    accountBalances[gameLootAddress][symbol] += amount;
-    ERC20(whitelistedTokens[symbol]).transferFrom(msg.sender, gameLootAddress, amount);
-  }
-  
-  
- function setMessage(string memory newMessage)public{
- 
-  require(msg.sender == owner, 'You have to be owner to set Game Message');
- message=newMessage;
-  emit Log(msg.sender, newMessage);
+function winnerCalle() public{
+    winner = payable(msg.sender);
+ uint amount = address(this).balance;
+  winner.transfer(amount/2);
+}
+    function seeBalance() external view returns(uint){
 
- }
- 
- function getMessage()public view returns(string memory){
- return message;
- }
+        return address(msg.sender).balance;
+    }
+    // Function to withdraw all Ether from this contract.
+    function withdraw() public {
+        // get the amount of Ether stored in this contract
+        uint amount = address(this).balance;
+  owner.transfer(amount/2);
+        // send all Ether to owner
+        // Owner can receive Ether since the address of owner is payable
+       // (bool success, ) = owner.call{value: amount}("");
+        //require(success, "Failed to send Ether");
+    }
 
-  function whitelistToken(bytes32 symbol, address tokenAddress) external {
-    require(msg.sender == owner, 'This function is not public');
+    // Function to transfer Ether from this contract to address from input
+    function transfer(address payable _to, uint _amount) public {
+        // Note that "to" is declared as payable
+        (bool success, ) = _to.call{value: _amount}("");
+        require(success, "Failed to send Ether");
+    }
 
-    whitelistedTokens[symbol] = tokenAddress;
-  }
 
-  function getWhitelistedTokenAddresses(bytes32 token) external view returns(address) {
-    return whitelistedTokens[token];
-  }
-
-  function depositTokens(uint256 amount, bytes32 symbol) external {
-    accountBalances[msg.sender][symbol] += amount;
-    ERC20(whitelistedTokens[symbol]).transferFrom(msg.sender, address(this), amount);
-  }
-
-  function withdrawTokens(uint256 amount, bytes32 symbol) external {
-    require(accountBalances[msg.sender][symbol] >= amount, 'Insufficent funds');
-
-    accountBalances[msg.sender][symbol] -= amount;
-    ERC20(whitelistedTokens[symbol]).transfer(msg.sender, amount);
-  }
+    
 }
