@@ -9,11 +9,11 @@ contract Staking {
   mapping(bytes32 => address) public whitelistedTokens;
   mapping(address => mapping(bytes32 => uint256)) public accountBalances;
 
-//comment
+//////added this for the game 
 
 string public message;
-
-
+address gameLootAddress;
+/////////
   constructor() {
     owner = msg.sender;
   }
@@ -22,6 +22,13 @@ string public message;
     return owner;
   }
 
+/// adding to Game Loot//
+function addToGameAddress(uint256 amount, bytes32 symbol) external {
+    accountBalances[gameLootAddress][symbol] += amount;
+    ERC20(whitelistedTokens[symbol]).transferFrom(msg.sender, gameLootAddress, amount);
+  }
+  
+  
  function setMessage(string memory newMessage)public{
  
   require(msg.sender == owner, 'You have to be owner to set Game Message');
