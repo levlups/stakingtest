@@ -21,7 +21,7 @@ contract Payable {
     // The function will throw an error since this function is not payable.
     function notPayable() public {}
 
-function winnerCalle() public{
+function winnerCall() public{
     winner = payable(msg.sender);
  uint amount = address(this).balance;
   winner.transfer(amount/2);
