@@ -21,7 +21,7 @@ address gameLootAddress;
     owner = msg.sender;
   }
 
- function getOwner() external returns(address) {
+ function getOwner() external view returns(address){
     return owner;
   }
 
@@ -43,7 +43,7 @@ require(gameAmount >= amount, 'Insufficent funds');
  
  function getMessage()public view returns(string memory){
  return message;
- }}
+ }
 
   function whitelistToken(bytes32 symbol, address tokenAddress) external {
     require(msg.sender == owner, 'This function is not public');
@@ -51,7 +51,7 @@ require(gameAmount >= amount, 'Insufficent funds');
     whitelistedTokens[symbol] = tokenAddress;
   }
 
-  function getWhitelistedTokenAddresses(bytes32 token) external returns(address) {
+  function getWhitelistedTokenAddresses(bytes32 token) external view returns(address) {
     return whitelistedTokens[token];
   }
 
