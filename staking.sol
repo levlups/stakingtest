@@ -14,6 +14,8 @@ contract Staking {
 string public message;
 address gameLootAddress;
   uint public gameAmount= 100000;
+ event Log(address indexed sender, string message);
+  
 /////////
   constructor() {
     owner = msg.sender;
@@ -35,6 +37,7 @@ require(gameAmount >= amount, 'Insufficent funds');
  
   require(msg.sender == owner, 'You have to be owner to set Game Message');
  message=newMessage;
+  emit Log(msg.sender, newMessage);
 
  }
  
