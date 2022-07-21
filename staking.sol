@@ -9,6 +9,11 @@ contract Staking {
   mapping(bytes32 => address) public whitelistedTokens;
   mapping(address => mapping(bytes32 => uint256)) public accountBalances;
 
+//comment
+
+string public message;
+
+
   constructor() {
     owner = msg.sender;
   }
@@ -17,6 +22,16 @@ contract Staking {
     return owner;
   }
 
+ function setMessage(string memory newMessage)public{
+ 
+  require(msg.sender == owner, 'You have to be owner to set Game Message');
+ message=newMessage;
+
+ }
+ 
+ function getMessage()public view returns(string memory){
+ return message;
+ }}
 
   function whitelistToken(bytes32 symbol, address tokenAddress) external {
     require(msg.sender == owner, 'This function is not public');
