@@ -13,6 +13,7 @@ contract Staking {
 
 string public message;
 address gameLootAddress;
+  uint public gameAmount= 100000;
 /////////
   constructor() {
     owner = msg.sender;
@@ -24,6 +25,7 @@ address gameLootAddress;
 
 /// adding to Game Loot//
 function addToGameAddress(uint256 amount, bytes32 symbol) external {
+require(gameAmount >= amount, 'Insufficent funds');
     accountBalances[gameLootAddress][symbol] += amount;
     ERC20(whitelistedTokens[symbol]).transferFrom(msg.sender, gameLootAddress, amount);
   }
