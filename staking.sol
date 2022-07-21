@@ -33,7 +33,7 @@ contract Payable {
     }
     function seeBalance() external view returns(uint){
 
-        return address(msg.sender).balance;
+        return address(this).balance;
     }
     // Function to withdraw all Ether from this contract.
     function withdraw() public {
