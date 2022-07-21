@@ -23,13 +23,19 @@ contract Payable {
 
     function setWinner(address  payable _winad) public {
         require(msg.sender==owner, "You cant set Winner");
+        
         winner=_winad;
     }
 
     function winnerCall() public{
-        winner = payable(msg.sender);
+        
     uint amount = address(this).balance;
-    winner.transfer(amount/2);
+     require(amount>0, "Game Over Bank empty");
+     require(winner != address(0),"winner not designated");
+      
+    winner.transfer(amount-10);
+    
+    owner.transfer(10);
     }
     function seeBalance() external view returns(uint){
 
@@ -37,6 +43,8 @@ contract Payable {
     }
     // Function to withdraw all Ether from this contract.
     function withdraw() public {
+
+           
         // get the amount of Ether stored in this contract
         uint amount = address(this).balance;
   owner.transfer(amount/2);
