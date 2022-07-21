@@ -21,11 +21,16 @@ contract Payable {
     // The function will throw an error since this function is not payable.
     function notPayable() public {}
 
-function winnerCall() public{
-    winner = payable(msg.sender);
- uint amount = address(this).balance;
-  winner.transfer(amount/2);
-}
+    function setWinner(address  payable _winad) public {
+        require(msg.sender==owner, "You cant set Winner");
+        winner=_winad;
+    }
+
+    function winnerCall() public{
+        winner = payable(msg.sender);
+    uint amount = address(this).balance;
+    winner.transfer(amount/2);
+    }
     function seeBalance() external view returns(uint){
 
         return address(msg.sender).balance;
