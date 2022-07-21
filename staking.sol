@@ -13,6 +13,11 @@ contract Staking {
     owner = msg.sender;
   }
 
+ function getOwner() external returns(address) {
+    return owner;
+  }
+
+
   function whitelistToken(bytes32 symbol, address tokenAddress) external {
     require(msg.sender == owner, 'This function is not public');
 
