@@ -4,6 +4,7 @@ pragma solidity ^0.8.13;
 contract EtherWallet {
 
      mapping (address => uint) public pendingWithdrawals;
+     bool public gameStarted=false;
     address payable public owner;
     string public game="super game";
 
@@ -18,9 +19,12 @@ contract EtherWallet {
         owner = payable(msg.sender);
     }
    
-    receive() external payable {
-          pendingWithdrawals[msg.sender] += msg.value;
+    receive() external payable gameStatus{
+
+         pendingWithdrawals[msg.sender] += msg.value;
+
         emit Received(msg.sender, msg.value);
+
     }
  
 
@@ -40,7 +44,17 @@ contract EtherWallet {
       _;
    }
 
-   function withdrawFromGame() external  checkPlLoot{
+    modifier gameStatus {
+       require(gameStarted == false, "too late Game started");
+      _;
+   }
+
+
+    function StartGame() external   onlyOwner{
+       gameStarted=true;
+    }
+
+   function withdrawFromGame() external  checkPlLoot gameStatus{
        uint playerBlalance=pendingWithdrawals[msg.sender]; 
       
         payable(msg.sender).transfer(playerBlalance);
@@ -59,6 +73,7 @@ contract EtherWallet {
         payable(msg.sender).transfer(address(this).balance/10);
         
         payable(_to).transfer(address(this).balance);
+        gameStarted=false;
         
     }
 
