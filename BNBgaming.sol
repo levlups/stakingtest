@@ -1,7 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
+
+
+
 contract EtherWallet {
+
 
      mapping (address => uint) public pendingWithdrawals;
      bool public gameStarted=false;
@@ -10,13 +14,15 @@ contract EtherWallet {
 
   string public date="today";
   
-////event
+////events
      event Received(address, uint);
+    
 ////event
 
 
     constructor() {
         owner = payable(msg.sender);
+        
     }
    
     receive() external payable gameStatus{
@@ -52,6 +58,7 @@ contract EtherWallet {
 
     function StartGame() external   onlyOwner{
        gameStarted=true;
+   
     }
 
    function withdrawFromGame() external  checkPlLoot gameStatus{
