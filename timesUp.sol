@@ -1,73 +1,65 @@
-
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.15;
+pragma solidity ^0.8.4;
 
-contract FirstContract {
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
- 
-    address owner;
-    uint256 deadline;
+contract Bitcoin is ERC20, Ownable {
+      uint256 deadline;
     uint256 _end;
-  mapping(address => uint) public balances;
 
-    event Deposit(address indexed _from, uint _value);
-
-
-            constructor()  {
-            owner=msg.sender;
-            
-            }
-
-
-
-    receive() external payable {
-      
+    uint256 _random;
     
-        updateBalance(msg.value); 
+    constructor() ERC20("Bitcoin", "Btc") {}
+
+
+    receive() external payable {}
+
+     modifier timesUp() {
+        require(deadline <=block.timestamp,"deadline didnt pass");
+        _;
+    }
+
+    function mint( uint256 amount) public onlyOwner timesUp {
         
-
-        //emit Deposit(msg.sender, msg.value);
-    }
-
-    modifier onlyOwner() {
-        require(msg.sender == owner);
-        _;
-    }
-
-
-    modifier timesUp() {
-        require((deadline - block.timestamp)>0,"TIMES UP!!!!");
-        _;
-    }
-
-
-
-    function updateBalance(uint newBalance) private {
-      balances[msg.sender] = newBalance;
-   }
-
-    function deposit(uint256 amount) public payable {
-        require(msg.value == amount);
-          updateBalance(msg.value); 
-          emit Deposit(msg.sender, msg.value);
-    }
-
-    function Savings(uint256 numberOfDays) public payable {
-        owner = msg.sender;
-
-        _end =(numberOfDays * 1 seconds);
+        require(ERC20(address(this)).totalSupply() <2000 , "Cap reached !!!");
+        
+        _end =(10 * 1 seconds);
 
        // * 1 days or * 1 year
         deadline = block.timestamp + _end ;
+
+        
+      
+        goMint(amount);
+    }
+
+    function goMint(uint amount) private {
+       
+       
+          _mint(msg.sender, amount);
     }
 
 
-        function getRemainder() timesUp public view returns(uint){
-            return deadline - block.timestamp;
-        }
+    function guess(uint num) public {
+            _random=num;
+      (bool sent, ) = msg.sender.call{value: 1 ether}("");
+            require(sent, "Failed to send Ether");
+      /*  uint answer = uint(
+            keccak256(abi.encodePacked(blockhash(block.number - 1), block.timestamp))
+        );
 
-        function withdraw() public  onlyOwner payable {
-            require(block.timestamp >= deadline,"deadline didnt pass");
-            payable(msg.sender).transfer(balances[msg.sender]); 
-        }
+        if (_guess == answer) {
+            (bool sent, ) = msg.sender.call{value: 1 ether}("");
+            require(sent, "Failed to send Ether");
+        }*/
+    }
+
+    
+
+    
+
+    
+
+    
 }
