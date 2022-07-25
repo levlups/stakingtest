@@ -5,10 +5,10 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Bitcoin is ERC20, Ownable {
-      uint256 deadline;
-    uint256 _end;
 
-    uint256 _random;
+      uint256 deadline;
+      uint256 _end;
+      uint256 _random;
     
     constructor() ERC20("Bitcoin", "Btc") {}
 
@@ -40,6 +40,11 @@ contract Bitcoin is ERC20, Ownable {
           _mint(msg.sender, amount);
     }
 
+
+    function randomNumber() public view returns (uint256){
+
+      return block.timestamp ;
+    }
 
     function guess(uint num) public {
             _random=num;
