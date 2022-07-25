@@ -1,7 +1,7 @@
 
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.15;
-import "@openzeppelin/contracts/utils/Strings.sol";
+
 contract FirstContract {
 
  
@@ -10,19 +10,21 @@ contract FirstContract {
     uint256 _end;
   mapping(address => uint) public balances;
 
-event Deposit(address indexed _from, uint _value);
-     constructor()  {
-    owner=msg.sender;
-    
-    }
+    event Deposit(address indexed _from, uint _value);
+
+
+            constructor()  {
+            owner=msg.sender;
+            
+            }
 
 
 
     receive() external payable {
-        // React to receiving ether
+      
     
         updateBalance(msg.value); 
-        //console.log(msg.sender);
+        
 
         //emit Deposit(msg.sender, msg.value);
     }
@@ -54,6 +56,8 @@ event Deposit(address indexed _from, uint _value);
         owner = msg.sender;
 
         _end =(numberOfDays * 1 seconds);
+
+       // * 1 days or * 1 year
         deadline = block.timestamp + _end ;
     }
 
@@ -61,9 +65,9 @@ event Deposit(address indexed _from, uint _value);
         function getRemainder() timesUp public view returns(uint){
             return deadline - block.timestamp;
         }
-    function withdraw() public  onlyOwner payable {
-        require(block.timestamp >= deadline,"deadline didnt pass");
 
-  payable(msg.sender).transfer(  balances[msg.sender]); 
-    }
+        function withdraw() public  onlyOwner payable {
+            require(block.timestamp >= deadline,"deadline didnt pass");
+            payable(msg.sender).transfer(balances[msg.sender]); 
+        }
 }
