@@ -8,8 +8,8 @@ contract Bitcoin is ERC20, Ownable {
       uint256 deadline;
     uint256 _end;
 
-    uint256 public wathTime;
-    uint public cap=0;
+    
+    
     constructor() ERC20("Bitcoin", "Btc") {}
 
 
@@ -21,11 +21,8 @@ contract Bitcoin is ERC20, Ownable {
 
     function mint( uint256 amount) public onlyOwner timesUp {
         
-        require(cap<20000 , "Cap reached !!!");
+        require(ERC20(address(this)).totalSupply() <2000 , "Cap reached !!!");
         
-        cap+=amount;
-
-      
         _end =(10 * 1 seconds);
 
        // * 1 days or * 1 year
@@ -33,10 +30,10 @@ contract Bitcoin is ERC20, Ownable {
 
         
       
-        go(amount);
+        goMint(amount);
     }
 
-    function go(uint amount) private {
+    function goMint(uint amount) private {
        
        
           _mint(msg.sender, amount);
